@@ -34,7 +34,7 @@ public interface WrapService {
     /**
      * 포장 이름으로 단건 조회를 위한 method.
      *
-     * @param wrapName 조회할 포장 아이디 입니다.
+     * @param wrapName 조회할 포장이름 입니다.
      * @return WrapResponseDto 포장 정보가 반환됩니다.
      */
     WrapResponseDto getWrapByName(String wrapName);
