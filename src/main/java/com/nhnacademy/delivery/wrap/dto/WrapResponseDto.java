@@ -4,11 +4,15 @@ import com.nhnacademy.delivery.wrap.domain.Wrap;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
+/**
+ * 포장 기본정보를 반환하기 위한 response dto 입니다.
+ *
+ * @author : 박동희
+ * @date : 2024-03-29
+ **/
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class WrapResponseDto {

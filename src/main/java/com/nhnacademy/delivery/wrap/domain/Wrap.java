@@ -4,6 +4,14 @@ import lombok.*;
 
 import javax.persistence.*;
 
+
+/**
+ * 포장(Wrap) 테이블.
+ *
+ * @author : 박동희
+ * @date : 2024-03-29
+ *
+ **/
 @Entity
 @Getter
 @EqualsAndHashCode

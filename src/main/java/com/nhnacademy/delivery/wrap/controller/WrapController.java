@@ -13,17 +13,37 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * 포장(Wrap) RestController 입니다.
+ *
+ * @author : 박동희
+ * @date : 2024-03-29
+ **/
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/delivery")
 public class WrapController {
     private final WrapService wrapService;
 
-    @GetMapping("/wraps/")
+
+    /**
+     * 포장 전체 조회 요청 시 사용되는 메소드입니다.
+     *
+     * @return 성공했을 때 응답코드 200 OK 반환하고 body에 WrapResponseDto list.
+     */
+    @GetMapping("/wraps")
     public ResponseEntity<List<WrapResponseDto>> getWraps(){
         return ResponseEntity.status(HttpStatus.OK).body(wrapService.getWraps());
     }
+
+
+    /**
+     * 포장 아이디로 포장 단건 조회 요청 시 사용되는 메소드입니다.
+     *
+     * @param wrapId 조회를 위한 해당 포장 아이디 입니다.
+     * @throws NotFoundWrapException 포장id로 조회했을 때 찾을 수 없을 경우 응답코드 404 NOT_FOUND 반환합니다.
+     * @return 성공했을 때 응답코드 200 OK 반환합니다.
+     */
     @GetMapping("/wraps/id/{wrapId}")
     public ResponseEntity<WrapResponseDto> getWrapById(@PathVariable Long wrapId){
         try{
@@ -33,6 +53,14 @@ public class WrapController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    /**
+     * 포장 이름로 포장 단건 조회 요청 시 사용되는 메소드입니다.
+     *
+     * @param wrapName 조회를 위한 해당 포장 이름 입니다.
+     * @throws NotFoundWrapNameException 포장이름으로 조회했을 때 찾을 수 없을 경우 응답코드 404 NOT_FOUND 반환합니다.
+     * @return 성공했을 때 응답코드 200 OK 반환합니다.
+     */
     @GetMapping("/wraps/name/{wrapName}")
     public ResponseEntity<WrapResponseDto> getWrapByName(@PathVariable String wrapName){
         try{
@@ -43,6 +71,13 @@ public class WrapController {
         }
     }
 
+    /**
+     * 포장 셍상 요청 시 사용되는 메소드입니다.
+     *
+     * @param wrapRequestDto 생성을 위한 해당 정보 입니다.
+     * @throws AlreadyExistWrapException 이미 포장이 존재할때 응답코드 404 NOT_FOUND 반환합니다.
+     * @return 성공했을 때 응답코드 201 CREATE 반환합니다.
+     */
     @PostMapping("/wraps")
     public ResponseEntity<WrapResponseDto> saveWrap(@RequestBody WrapRequestDto wrapRequestDto){
         try{
@@ -53,6 +88,13 @@ public class WrapController {
         }
     }
 
+    /**
+     * 포장 수정 요청 시 사용되는 메소드입니다.
+     *
+     * @param modifyWrapRequestDto 수정를 위한 해당 정보 입니다.
+     * @throws NotFoundWrapException 포장id로 조회했을 때 찾을 수 없을 경우 응답코드 404 NOT_FOUND 반환합니다.
+     * @return 성공했을 때 응답코드 200 OK 반환합니다.
+     */
     @PutMapping("/wraps/")
     public ResponseEntity<WrapResponseDto> modifyWrap(@RequestBody ModifyWrapRequestDto modifyWrapRequestDto){
         try{
@@ -63,6 +105,13 @@ public class WrapController {
         }
     }
 
+    /**
+     * 포장 아이디로 삭제 요청 시 사용되는 메소드입니다.
+     *
+     * @param wrapId 포장 아이디 입니다.
+     * @throws NotFoundWrapException 포장id로 조회했을 때 찾을 수 없을 경우 응답코드 404 NOT_FOUND 반환합니다.
+     * @return 성공했을 때 응답코드 200 OK 반환합니다.
+     */
     @DeleteMapping("/wraps/id/{wrapId}")
     public ResponseEntity<Void> deleteById(@PathVariable Long wrapId){
         try {
@@ -72,6 +121,14 @@ public class WrapController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    /**
+     * 포장 이름으로 삭제 요청 시 사용되는 메소드입니다.
+     *
+     * @param wrapName 포장 아이디 입니다.
+     * @throws NotFoundWrapNameException 포장이름으로 조회했을 때 찾을 수 없을 경우 응답코드 404 NOT_FOUND 반환합니다.
+     * @return 성공했을 때 응답코드 200 OK 반환합니다.
+     */
     @DeleteMapping("/wraps/name/{wrapName}")
     public ResponseEntity<Void> deleteByName(@PathVariable String wrapName){
         try {

@@ -3,10 +3,13 @@ package com.nhnacademy.delivery.wrap.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
+/**
+ * 포장 수정을 위한 request dto 입니다.
+ *
+ * @author : 박동희
+ * @date : 2024-03-29
+ **/
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ModifyWrapRequestDto {

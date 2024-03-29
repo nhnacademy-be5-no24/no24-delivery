@@ -17,10 +17,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 포장 서비스의 구현체입니다.
+ *
+ * @author : 박동희
+ * @date : 2024-03-29
+ **/
 @Service
 @RequiredArgsConstructor
 public class WrapServiceImpl implements WrapService {
-    private WrapRepository wrapRepository;
+    private final WrapRepository wrapRepository;
+
+    /**
+     * 포장 전체 조회를 위한 method.
+     *
+     * @return WrapResponDto 리스트를 반환.
+     */
     @Override
     @Transactional(readOnly = true)
     public List<WrapResponseDto> getWraps() {
