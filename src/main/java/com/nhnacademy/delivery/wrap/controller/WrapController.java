@@ -30,7 +30,8 @@ public class WrapController {
 
     /**
      * 포장 전체 조회 요청 시 사용되는 메소드입니다.
-     *
+     * @param page 페이지를 나타내는 변수 입니다.
+     * @param size 페이지 크기를 나타내는 변수 입니다.
      * @return 성공했을 때 응답코드 200 OK 반환하고 body에 WrapResponseDto list.
      */
     @GetMapping("/wraps")
