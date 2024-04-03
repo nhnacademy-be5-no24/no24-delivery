@@ -8,11 +8,13 @@ import com.nhnacademy.delivery.wrap.exception.NotFoundWrapException;
 import com.nhnacademy.delivery.wrap.exception.NotFoundWrapNameException;
 import com.nhnacademy.delivery.wrap.service.WrapService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 /**
  * 포장(Wrap) RestController 입니다.
  *
@@ -32,8 +34,13 @@ public class WrapController {
      * @return 성공했을 때 응답코드 200 OK 반환하고 body에 WrapResponseDto list.
      */
     @GetMapping("/wraps")
-    public ResponseEntity<List<WrapResponseDto>> getWraps(){
-        return ResponseEntity.status(HttpStatus.OK).body(wrapService.getWraps());
+    public ResponseEntity<Page<WrapResponseDto>> getWraps(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<WrapResponseDto> wrapPage = wrapService.getWraps(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(wrapPage);
     }
 
 

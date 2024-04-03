@@ -4,6 +4,8 @@ package com.nhnacademy.delivery.wrap.service;
 import com.nhnacademy.delivery.wrap.dto.ModifyWrapRequestDto;
 import com.nhnacademy.delivery.wrap.dto.WrapRequestDto;
 import com.nhnacademy.delivery.wrap.dto.WrapResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 /**
@@ -19,7 +21,7 @@ public interface WrapService {
      *
      * @return WrapResponDto 리스트를 반환.
      */
-    List<WrapResponseDto> getWraps();
+    Page<WrapResponseDto> getWraps(Pageable pageable);
 
 
     /**

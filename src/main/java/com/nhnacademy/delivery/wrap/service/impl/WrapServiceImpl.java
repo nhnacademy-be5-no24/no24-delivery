@@ -10,11 +10,11 @@ import com.nhnacademy.delivery.wrap.exception.NotFoundWrapNameException;
 import com.nhnacademy.delivery.wrap.repository.WrapRepository;
 import com.nhnacademy.delivery.wrap.service.WrapService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -35,14 +35,9 @@ public class WrapServiceImpl implements WrapService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<WrapResponseDto> getWraps() {
-        List<Wrap> wraps = wrapRepository.findAll();
-        List<WrapResponseDto> dtos = new ArrayList<>();
-        for(Wrap wrap : wraps){
-            WrapResponseDto dto = new WrapResponseDto(wrap.getWrapId(), wrap.getWrapName(), wrap.getWrapCost());
-            dtos.add(dto);
-        }
-        return dtos;
+    public Page<WrapResponseDto> getWraps(Pageable pageable) {
+        Page<Wrap> wrapsPage = wrapRepository.findAll(pageable);
+        return wrapsPage.map(wrap -> new WrapResponseDto(wrap.getWrapId(), wrap.getWrapName(), wrap.getWrapCost()));
     }
 
     @Override
