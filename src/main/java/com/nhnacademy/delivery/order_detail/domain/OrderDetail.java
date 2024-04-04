@@ -8,10 +8,10 @@ import lombok.*;
 import javax.persistence.*;
 
 /**
- * 주문 디테일(OrderDetail) 테이블.
+ * 주문 상세(OrderDetail) 테이블.
  *
  * @author : 박동희
- * @date : 2024-04-01
+ * @date : 2024-04-04
  *
  **/
 @Entity

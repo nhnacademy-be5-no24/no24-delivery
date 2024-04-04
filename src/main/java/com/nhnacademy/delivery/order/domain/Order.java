@@ -17,9 +17,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @EqualsAndHashCode
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,5 +66,30 @@ public class Order {
     @Column(name = "req")
     private String req;
 
-
+    @Builder
+    public Order(Long orderId,
+                 LocalDate orderDate,
+                 Integer orderState,
+                 Long deliveryFee,
+                 Payment payment,
+                 Customer customer,
+                 String receiverName,
+                 String receiverPhoneNumber,
+                 String zipcode,
+                 String address,
+                 String addressDetail,
+                 String req) {
+        this.orderId = orderId;
+        this.orderDate = orderDate;
+        this.orderState = orderState;
+        this.deliveryFee = deliveryFee;
+        this.payment = payment;
+        this.customer = customer;
+        this.receiverName = receiverName;
+        this.receiverPhoneNumber = receiverPhoneNumber;
+        this.zipcode = zipcode;
+        this.address = address;
+        this.addressDetail = addressDetail;
+        this.req = req;
+    }
 }
