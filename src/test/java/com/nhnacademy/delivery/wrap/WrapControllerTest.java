@@ -58,7 +58,7 @@ class WrapControllerTest {
         when(wrapService.getWraps(any(Pageable.class))).thenReturn(wrapResponseDtoPage);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/delivery/wraps")
-                        .param("page", "0")  // 페이지 번호
+                        .param("page", "0")
                         .param("size", "10")) // 페이지 크기
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
