@@ -3,26 +3,19 @@ package com.nhnacademy.delivery.order.dto.response;
 import com.nhnacademy.delivery.order.domain.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
-
-@Data
+@Getter
 @Builder
-@AllArgsConstructor
-public class OrderResponseDto {
-
-
+public class OrderListForAdminResponseDto {
     private Long orderId;
     private LocalDate orderDate;
     private Order.OrderState orderState;
-    private Long deliveryFee;
+    private Long deliverFee;
     private Long paymentId;
-    private String adrress;
-    private String receiverName;
     private Long customerNo;
-    private String req;
-
+    private Long zipcode;
 
 }

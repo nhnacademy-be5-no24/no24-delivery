@@ -18,7 +18,14 @@ import java.time.LocalDate;
 @Getter
 @EqualsAndHashCode
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Order {
+
+    public enum OrderState {
+        WAITING, SHIPPING, COMPLETED, RETURNS, ORDER_CANCELED, PURCHASE_CONFIRMED
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
@@ -26,16 +33,8 @@ public class Order {
     @Column(name = "order_date", nullable = false)
     private LocalDate orderDate;
 
-    /*
-        0 : 대기
-        1 : 배송중
-        2 : 완료
-        3 : 반품
-        4 : 주문 취소
-        5 : 구매 확정
-     */
     @Column(name = "order_state", nullable = false)
-    private Integer orderState;
+    private OrderState orderState;
 
     @Column(name = "delivery_fee", nullable = false)
     private Long deliveryFee;
@@ -66,30 +65,5 @@ public class Order {
     @Column(name = "req")
     private String req;
 
-    @Builder
-    public Order(Long orderId,
-                 LocalDate orderDate,
-                 Integer orderState,
-                 Long deliveryFee,
-                 Payment payment,
-                 Customer customer,
-                 String receiverName,
-                 String receiverPhoneNumber,
-                 String zipcode,
-                 String address,
-                 String addressDetail,
-                 String req) {
-        this.orderId = orderId;
-        this.orderDate = orderDate;
-        this.orderState = orderState;
-        this.deliveryFee = deliveryFee;
-        this.payment = payment;
-        this.customer = customer;
-        this.receiverName = receiverName;
-        this.receiverPhoneNumber = receiverPhoneNumber;
-        this.zipcode = zipcode;
-        this.address = address;
-        this.addressDetail = addressDetail;
-        this.req = req;
-    }
+
 }
