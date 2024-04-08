@@ -10,6 +10,7 @@ import com.nhnacademy.delivery.wrap.exception.NotFoundWrapException;
 import com.nhnacademy.delivery.wrap.exception.NotFoundWrapNameException;
 import com.nhnacademy.delivery.wrap.service.WrapService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -94,7 +95,7 @@ class WrapControllerTest {
         when(wrapService.getWrapByName(wrapName)).thenReturn(wrapResponseDto);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/delivery/wraps/name/{wrapName}", wrapName)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.wrapId").value(wrapResponseDto.getWrapId()));
     }
@@ -104,21 +105,23 @@ class WrapControllerTest {
         when(wrapService.getWrapByName(wrapName)).thenThrow(NotFoundWrapNameException.class);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/delivery/wraps/name/{wrapName}", wrapName)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
     @Test
+    @DisplayName("포장 등록 성공")
     void testSaveWrap_ReturnsCreated() throws Exception {
         when(wrapService.saveWrap(wrapRequestDto)).thenReturn(wrapResponseDto);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/delivery/wraps")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(wrapRequestDto)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(wrapRequestDto)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.wrapId").value(wrapResponseDto.getWrapId()))
                 .andExpect(jsonPath("$.wrapName").value(wrapResponseDto.getWrapName()));
     }
     @Test
+    @DisplayName("포장 등록 실패")
     void testSaveWrap_ReturnsNotFound() throws Exception{
         when(wrapService.saveWrap(wrapRequestDto)).thenThrow(AlreadyExistWrapException.class);
 
@@ -128,9 +131,10 @@ class WrapControllerTest {
                 .andExpect(status().isNotFound());
     }
     @Test
+
     void testModifyWrap_ReturnsWrapResponseDto() throws Exception{
         modifyWrapRequestDto = ModifyWrapRequestDto.builder()
-                        .wrapId(1L).wrapName("wrap1").wrapCost(1L).build();
+                .wrapId(1L).wrapName("wrap1").wrapCost(1L).build();
         when(wrapService.modifyWrap(modifyWrapRequestDto)).thenReturn(wrapResponseDto);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/delivery/wraps/")
