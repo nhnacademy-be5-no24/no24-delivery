@@ -17,8 +17,6 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         super(Order.class);
     }
 
-
-
     @Override
     public Page<OrderListForAdminResponseDto> getOrderList(Pageable pageable) {
         return null;
