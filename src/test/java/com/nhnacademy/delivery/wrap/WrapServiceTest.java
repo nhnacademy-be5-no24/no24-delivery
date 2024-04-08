@@ -15,6 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,22 +46,25 @@ class WrapServiceTest {
     void testGetWraps(){
         List<Wrap> wraps = new ArrayList<>();
         Wrap wrap1 = Wrap.builder()
-                        .wrapId(1L).wrapName("wrap1").wrapCost(1L).build();
+                .wrapId(1L).wrapName("wrap1").wrapCost(1L).build();
         Wrap wrap2 = Wrap.builder()
                 .wrapId(2L).wrapName("wrap2").wrapCost(2L).build();
         wraps.add(wrap1);
         wraps.add(wrap2);
 
-        when(wrapRepository.findAll()).thenReturn(wraps);
-        List<WrapResponseDto> results = wrapService.getWraps();
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Wrap> wrapsPage = new PageImpl<>(wraps, pageable, wraps.size());
 
-        assertEquals(2, results.size());
-        assertEquals(1L, results.get(0).getWrapId());
-        assertEquals("wrap1", results.get(0).getWrapName());
-        assertEquals(1L, results.get(0).getWrapCost());
-        assertEquals(2L, results.get(1).getWrapId());
-        assertEquals("wrap2", results.get(1).getWrapName());
-        assertEquals(2L, results.get(1).getWrapCost());
+        when(wrapRepository.findAll(pageable)).thenReturn(wrapsPage);
+        Page<WrapResponseDto> results = wrapService.getWraps(pageable);
+
+        assertEquals(2, results.getTotalElements());
+        assertEquals(1L, results.getContent().get(0).getWrapId());
+        assertEquals("wrap1", results.getContent().get(0).getWrapName());
+        assertEquals(1L, results.getContent().get(0).getWrapCost());
+        assertEquals(2L, results.getContent().get(1).getWrapId());
+        assertEquals("wrap2", results.getContent().get(1).getWrapName());
+        assertEquals(2L, results.getContent().get(1).getWrapCost());
     }
 
     @Test
