@@ -7,7 +7,6 @@ import com.nhnacademy.delivery.order.domain.QOrder;
 import com.nhnacademy.delivery.order.dto.response.OrderListForAdminResponseDto;
 import com.nhnacademy.delivery.order.dto.response.OrderListResponseDto;
 import com.nhnacademy.delivery.order.repository.OrderRepositoryCustom;
-import com.nhnacademy.delivery.order_detail.domain.OrderDetail;
 import com.nhnacademy.delivery.order_detail.domain.QOrderDetail;
 import com.nhnacademy.delivery.wrap.domain.QWrap;
 import com.querydsl.core.types.Projections;
@@ -17,7 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.support.PageableExecutionUtils;
 
-import java.util.List;
+
 
 public class OrderRepositoryImpl extends QuerydslRepositorySupport implements OrderRepositoryCustom {
 
