@@ -28,13 +28,7 @@ public interface OrderRepositoryCustom {
      */
     Page<OrderListResponseDto> getOrdersListByCustomer(Pageable pageable, Long customerNo);
 
-    /**
-     * 주문 번호로 주문상품들을 가져오는 메소드.
-     *
-     * @param orderId 주문번호.
-     * @return 주문상품들.
-     */
-    List<OrderDetail> getOrderProductList(Long orderId);
+
 
 
 

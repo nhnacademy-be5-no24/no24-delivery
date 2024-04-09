@@ -1,11 +1,14 @@
 package com.nhnacademy.delivery.order.domain;
 
 import com.nhnacademy.delivery.customer.domain.Customer;
+import com.nhnacademy.delivery.order_detail.domain.OrderDetail;
 import com.nhnacademy.delivery.payment.domain.Payment;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 주문(Order) 테이블.
@@ -65,5 +68,7 @@ public class Order {
     @Column(name = "req")
     private String req;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 
 }
