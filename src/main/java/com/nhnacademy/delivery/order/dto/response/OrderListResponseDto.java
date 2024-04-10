@@ -16,15 +16,17 @@ public class OrderListResponseDto {
     private String receiverName;
     private String receiverPhoneNumber;
     private String address;
+    private String addressDetail;
     private String orderState;
 
-    public OrderListResponseDto(Long orderId, List<BookInfo> books, LocalDate orderDate, String receiverName, String receiverPhoneNumber, String address, String orderState) {
+    public OrderListResponseDto(Long orderId, List<BookInfo> books, LocalDate orderDate, String receiverName, String receiverPhoneNumber, String address, String addressDetail, String orderState) {
         this.orderId = orderId;
         this.books = books;
         this.orderDate = orderDate;
         this.receiverName = receiverName;
         this.receiverPhoneNumber = receiverPhoneNumber;
         this.address = address;
+        this.addressDetail = addressDetail;
         this.orderState = orderState;
     }
 
@@ -32,12 +34,14 @@ public class OrderListResponseDto {
     @Builder
     public static class BookInfo {
         private String title;
-        private double salePrice;
-        private double wrapCost;
+        private Long salePrice;
+        private String wrapName;
+        private Long wrapCost;
 
-        public BookInfo(String title, double salePrice, double wrapCost) {
+        public BookInfo(String title, Long salePrice, String wrapName, Long wrapCost) {
             this.title = title;
             this.salePrice = salePrice;
+            this.wrapName = wrapName;
             this.wrapCost = wrapCost;
         }
 

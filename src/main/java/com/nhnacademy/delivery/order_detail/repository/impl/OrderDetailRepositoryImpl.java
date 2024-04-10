@@ -22,7 +22,7 @@ public class OrderDetailRepositoryImpl extends QuerydslRepositorySupport impleme
     QWrap wrap = QWrap.wrap;
 
     @Override
-    public List<OrderDetail> getOrderProductList(Long orderId) {
+    public List<OrderDetail> getOrderDetailList(Long orderId) {
         return from(orderDetail)
                 .select(orderDetail)
                 .innerJoin(order).on(orderDetail.order.orderId.eq(order.orderId))

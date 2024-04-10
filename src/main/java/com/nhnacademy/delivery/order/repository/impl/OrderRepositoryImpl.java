@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.util.Optional;
 
 
 public class OrderRepositoryImpl extends QuerydslRepositorySupport implements OrderRepositoryCustom {
@@ -65,11 +66,13 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
                         order.orderId.as("주문번호"),
                         orderDetail.book.bookTitle.as("도서"),
                         orderDetail.book.bookSalePrice.as("도서 판매 가격"),
+                        orderDetail.wrap.wrapName.as("포장지이름"),
                         orderDetail.wrap.wrapCost.as("포장가격"),
                         order.orderDate.as("주문날짜"),
                         order.receiverName.as("수취인"),
                         order.receiverPhoneNumber.as("수취인 전화번호"),
                         order.address.as("주소"),
+                        order.addressDetail.as("주소상세"),
                         order.orderState.as("배송상태")
                 ))
                 .innerJoin(order.customer, customer)
@@ -81,6 +84,27 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
 
         return PageableExecutionUtils.getPage(query.fetch(), pageable, query::fetchCount);
     }
-
-
+    @Override
+    public Optional<OrderListResponseDto> getOrderByOrderId(Long orderId) {
+        return Optional.of(
+                from(order)
+                        .select(Projections.constructor(
+                                OrderListResponseDto.class,
+                                order.orderId.as("주문번호"),
+                                orderDetail.book.bookTitle.as("도서이름"),
+                                orderDetail.book.bookSalePrice.as("판매가격"),
+                                orderDetail.wrap.wrapName.as("포장지이름"),
+                                orderDetail.wrap.wrapCost.as("포장지가격"),
+                                order.orderDate.as("주문날짜"),
+                                order.receiverName.as("수취인이름"),
+                                order.receiverPhoneNumber.as("수취인전화번호"),
+                                order.address.as("주소"),
+                                order.addressDetail.as("주소상세"),
+                                order.orderState.as("주문상태")
+                        ))
+                        .innerJoin(order.orderDetails, orderDetail)
+                        .where(order.orderId.eq(orderId))
+                        .fetchOne()
+        );
+    }
 }

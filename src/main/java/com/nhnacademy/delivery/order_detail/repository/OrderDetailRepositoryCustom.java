@@ -13,5 +13,5 @@ public interface OrderDetailRepositoryCustom {
      * @param orderId 주문번호.
      * @return 주문상품들.
      */
-    List<OrderDetail> getOrderProductList(Long orderId);
+    List<OrderDetail> getOrderDetailList(Long orderId);
 }
