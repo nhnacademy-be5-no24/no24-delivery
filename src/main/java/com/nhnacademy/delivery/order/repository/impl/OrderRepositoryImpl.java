@@ -41,10 +41,14 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
                         OrderListForAdminResponseDto.class,
                         order.orderId.as("주문번호"),
                         order.customer.customerNo.as("고객번호"),
+                        order.customer.customerName.as("고객이름"),
+                        order.customer.customerPhoneNumber.as("고객전화번호"),
+                        order.customer.customerRole.as("유저 타입"),
                         order.orderDate.as("주문날짜/배송날짜"),
                         order.orderState.as("주문상태"),
-                        wrap.wrapCost.as("포장지 가격"),
-                        book.bookTitle.as("도서 이름"),
+                        orderDetail.wrap.wrapName.as("포장지이름"),
+                        orderDetail.wrap.wrapCost.as("포장지 가격"),
+                        orderDetail.book.bookTitle.as("도서 이름"),
                         orderDetail.book.bookSalePrice.as("도서가격")
                 ))
                 .innerJoin(order.customer, customer)

@@ -1,5 +1,6 @@
 package com.nhnacademy.delivery.order.controller;
 
+import com.nhnacademy.delivery.order.dto.response.OrderListForAdminResponseDto;
 import com.nhnacademy.delivery.order.dto.response.OrderResponseDto;
 import com.nhnacademy.delivery.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
     private final OrderService orderService;
 
+
+    /**
+     * 모든 주문을 반환. (admin)
+     * @param pageable 페이징.
+     * @return 200 OK, 모든 주문 반환.
+     */
+    @GetMapping("/admin")
+    public ResponseEntity<Page<OrderListForAdminResponseDto>> getOrders(
+            Pageable pageable
+    ){
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(orderService.getOrders(pageable));
+    }
     /**
      * 고객 번호로 고객의 모든 주문을 반환.
      *
