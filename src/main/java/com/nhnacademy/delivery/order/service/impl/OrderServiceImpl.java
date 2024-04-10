@@ -3,12 +3,10 @@ package com.nhnacademy.delivery.order.service.impl;
 import com.nhnacademy.delivery.order.dto.request.OrderCreateRequestDto;
 import com.nhnacademy.delivery.order.dto.request.OrderRequestDto;
 import com.nhnacademy.delivery.order.dto.response.OrderListForAdminResponseDto;
-import com.nhnacademy.delivery.order.dto.response.OrderListResponseDto;
 import com.nhnacademy.delivery.order.dto.response.OrderResponseDto;
 import com.nhnacademy.delivery.order.exception.NotFoundOrderException;
 import com.nhnacademy.delivery.order.repository.OrderRepository;
 import com.nhnacademy.delivery.order.service.OrderService;
-import com.nhnacademy.delivery.order_detail.repository.OrderDetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,37 +26,43 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderDetailRepository orderDetailRepository;
 
 
+    // 주문리스트 전체 가져오기(admin)
     @Override
     @Transactional(readOnly = true)
     public Page<OrderListForAdminResponseDto> getOrders(Pageable pageable) {
        return orderRepository.getOrderList(pageable);
     }
 
+    // 주문아이디로 상품리스트 가져오기
     @Override
     @Transactional(readOnly = true)
-    public OrderListResponseDto getOrderByOrderId(Long orderId) {
-        Optional<OrderListResponseDto> optionalOrder = orderRepository.getOrderByOrderId(orderId);
+    public OrderResponseDto getOrderByOrderId(Long orderId) {
+        Optional<OrderResponseDto> optionalOrder = orderRepository.getOrderByOrderId(orderId);
         if(optionalOrder.isEmpty()){
             throw new NotFoundOrderException(orderId);
         }
         return optionalOrder.get();
     }
 
+    // 고객번호로 상품리스트 들고오기
     @Override
-    public Page<OrderListResponseDto> getOrdersByCustomer(
+    @Transactional(readOnly = true)
+    public Page<OrderResponseDto> getOrdersByCustomer(
             Pageable pageable, Long customerNo) {
         return orderRepository.getOrdersListByCustomer(pageable, customerNo);
     }
 
 
+    // 결제 완료되면 주문 저장하기
     @Override
-    public OrderListResponseDto createOrder(OrderCreateRequestDto orderCreateRequestDto) {
+    public OrderResponseDto createOrder(OrderCreateRequestDto orderCreateRequestDto) {
         return null;
     }
 
+
+    // 주문 수정
     @Override
     public OrderResponseDto updateOrderState(OrderRequestDto orderRequestDto) {
         return null;

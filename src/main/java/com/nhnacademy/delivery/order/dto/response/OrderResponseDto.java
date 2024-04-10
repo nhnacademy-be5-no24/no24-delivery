@@ -1,28 +1,41 @@
 package com.nhnacademy.delivery.order.dto.response;
 
-import com.nhnacademy.delivery.order.domain.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 
-
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
 public class OrderResponseDto {
 
-
     private Long orderId;
+    private List<BookInfo> books;
     private LocalDate orderDate;
-    private Order.OrderState orderState;
-    private Long deliveryFee;
-    private Long paymentId;
-    private String adrress;
     private String receiverName;
-    private Long customerNo;
-    private String req;
+    private String receiverPhoneNumber;
+    private String address;
+    private String addressDetail;
+    private String orderState;
 
 
+    @Getter
+    @Builder
+    public static class BookInfo {
+        private String title;
+        private Long salePrice;
+        private String wrapName;
+        private Long wrapCost;
+
+        public BookInfo(String title, Long salePrice, String wrapName, Long wrapCost) {
+            this.title = title;
+            this.salePrice = salePrice;
+            this.wrapName = wrapName;
+            this.wrapCost = wrapCost;
+        }
+
+    }
 }

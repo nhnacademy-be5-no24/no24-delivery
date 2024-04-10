@@ -5,7 +5,7 @@ import com.nhnacademy.delivery.customer.domain.QCustomer;
 import com.nhnacademy.delivery.order.domain.Order;
 import com.nhnacademy.delivery.order.domain.QOrder;
 import com.nhnacademy.delivery.order.dto.response.OrderListForAdminResponseDto;
-import com.nhnacademy.delivery.order.dto.response.OrderListResponseDto;
+import com.nhnacademy.delivery.order.dto.response.OrderResponseDto;
 import com.nhnacademy.delivery.order.repository.OrderRepositoryCustom;
 import com.nhnacademy.delivery.order_detail.domain.QOrderDetail;
 import com.nhnacademy.delivery.wrap.domain.QWrap;
@@ -59,10 +59,10 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
     }
 
     @Override
-    public Page<OrderListResponseDto> getOrdersListByCustomer(Pageable pageable, Long customerNo) {
-        JPQLQuery<OrderListResponseDto> query = from(order)
+    public Page<OrderResponseDto> getOrdersListByCustomer(Pageable pageable, Long customerNo) {
+        JPQLQuery<OrderResponseDto> query = from(order)
                 .select(Projections.constructor(
-                        OrderListResponseDto.class,
+                        OrderResponseDto.class,
                         order.orderId.as("주문번호"),
                         orderDetail.book.bookTitle.as("도서"),
                         orderDetail.book.bookSalePrice.as("도서 판매 가격"),
@@ -85,11 +85,11 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         return PageableExecutionUtils.getPage(query.fetch(), pageable, query::fetchCount);
     }
     @Override
-    public Optional<OrderListResponseDto> getOrderByOrderId(Long orderId) {
+    public Optional<OrderResponseDto> getOrderByOrderId(Long orderId) {
         return Optional.of(
                 from(order)
                         .select(Projections.constructor(
-                                OrderListResponseDto.class,
+                                OrderResponseDto.class,
                                 order.orderId.as("주문번호"),
                                 orderDetail.book.bookTitle.as("도서이름"),
                                 orderDetail.book.bookSalePrice.as("판매가격"),
