@@ -59,7 +59,7 @@ class WrapControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/delivery/wraps")
                         .param("page", "0")
-                        .param("size", "10")) // 페이지 크기
+                        .param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content").isArray())
