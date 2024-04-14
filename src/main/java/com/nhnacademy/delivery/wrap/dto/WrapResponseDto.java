@@ -4,6 +4,7 @@ import com.nhnacademy.delivery.wrap.domain.Wrap;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 
 /**
@@ -12,7 +13,7 @@ import lombok.Data;
  * @author : 박동희
  * @date : 2024-03-29
  **/
-@Data
+@Getter
 @AllArgsConstructor
 @Builder
 public class WrapResponseDto {
