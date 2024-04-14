@@ -1,5 +1,6 @@
 package com.nhnacademy.delivery.order_detail;
 
+
 import com.nhnacademy.delivery.book.domain.Book;
 import com.nhnacademy.delivery.order.domain.Order;
 import com.nhnacademy.delivery.order_detail.domain.OrderDetail;
@@ -12,8 +13,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @AutoConfigureMockMvc
-class OrderDetailTest {
-
+class OrderDetailEntityTest{
 
     @Test
     void testOrderDetail() {
