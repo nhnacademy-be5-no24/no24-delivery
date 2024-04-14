@@ -1,0 +1,66 @@
+package com.nhnacademy.delivery.order_detail;
+
+import com.nhnacademy.delivery.book.domain.Book;
+import com.nhnacademy.delivery.order.domain.Order;
+import com.nhnacademy.delivery.order_detail.domain.OrderDetail;
+import com.nhnacademy.delivery.wrap.domain.Wrap;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+
+import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@AutoConfigureMockMvc
+class OrderDetailTest {
+
+
+    @Test
+    void testOrderDetail() {
+        Book book = Book.builder()
+                .bookIsbn("1234567890")
+                .bookTitle("Test Book")
+                .bookDesc("This is a test book")
+                .bookPublisher("Test Publisher")
+                .bookPublishAt(LocalDate.now())
+                .bookFixedPrice(1000L)
+                .bookSalePrice(800L)
+                .bookIsPacking(false)
+                .bookViews(0L)
+                .bookStatus(1)
+                .bookQuantity(10L)
+                .bookImage("book.jpg")
+                .build();
+
+        Wrap wrap = Wrap.builder()
+                .wrapId(1L)
+                .wrapName("Test Wrap")
+                .wrapCost(200L)
+                .build();
+
+        Order order = Order.builder()
+                .orderId(1L)
+                .orderDate(LocalDate.now())
+                .orderState(Order.OrderState.WAITING)
+                .deliveryFee(500L)
+                .receiverName("John Doe")
+                .receiverPhoneNumber("1234567890")
+                .zipcode("12345")
+                .address("Test Address")
+                .addressDetail("Test Address Detail")
+                .req("Test Requirement")
+                .build();
+
+        OrderDetail orderDetail = OrderDetail.builder()
+                .orderDetailId(1L)
+                .order(order)
+                .book(book)
+                .wrap(wrap)
+                .build();
+
+        assertEquals(1L, orderDetail.getOrderDetailId());
+        assertEquals(1L, orderDetail.getOrder().getOrderId());
+        assertEquals("1234567890", orderDetail.getBook().getBookIsbn());
+        assertEquals(1L, orderDetail.getWrap().getWrapId());
+    }
+}

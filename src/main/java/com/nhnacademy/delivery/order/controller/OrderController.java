@@ -107,6 +107,14 @@ public class OrderController {
 
     }
 
+    /** todo 1 :
+     *  장바구니에서 dto 받아서 그 정보 뿌리기
+     *  구매자 정보 - customer
+     *  수신자 정보  ( todo 2 : 이거 수신자 정보 입력 받는 post 있어야할듯)
+     *  상품리스크 뿌리기 그리고 todo 3 : 쿠폰에 해당하는 애들 리스트도 뿌려야함
+     */
+
+
 
 
 }
