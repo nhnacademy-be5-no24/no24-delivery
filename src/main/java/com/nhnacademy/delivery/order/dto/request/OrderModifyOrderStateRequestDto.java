@@ -4,6 +4,7 @@ import com.nhnacademy.delivery.order.domain.Order;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 /**
  * 주문을 위한 request dto 입니다.
@@ -11,7 +12,7 @@ import lombok.Data;
  * @author : 박동희
  * @date : 2024-04-05
  **/
-@Data
+@Getter
 @AllArgsConstructor
 @Builder
 public class OrderModifyOrderStateRequestDto {
