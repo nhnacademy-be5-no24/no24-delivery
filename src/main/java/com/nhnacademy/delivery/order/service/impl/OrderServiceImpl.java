@@ -1,10 +1,13 @@
 package com.nhnacademy.delivery.order.service.impl;
 
+import com.nhnacademy.delivery.order.domain.Order;
 import com.nhnacademy.delivery.order.dto.request.OrderCreateRequestDto;
-import com.nhnacademy.delivery.order.dto.request.OrderRequestDto;
 import com.nhnacademy.delivery.order.dto.response.OrderListForAdminResponseDto;
 import com.nhnacademy.delivery.order.dto.response.OrderResponseDto;
+import com.nhnacademy.delivery.order.exception.InvalidOrderStateException;
 import com.nhnacademy.delivery.order.exception.NotFoundOrderException;
+import com.nhnacademy.delivery.order.exception.OrderStatusFailedException;
+import com.nhnacademy.delivery.order.exception.SaveOrderFailed;
 import com.nhnacademy.delivery.order.repository.OrderRepository;
 import com.nhnacademy.delivery.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -57,14 +61,52 @@ public class OrderServiceImpl implements OrderService {
 
     // 결제 완료되면 주문 저장하기
     @Override
+    @Transactional
     public OrderResponseDto createOrder(OrderCreateRequestDto orderCreateRequestDto) {
-        return null;
+        if(!orderCreateRequestDto.getOrderState().toString().isEmpty()){
+            throw new OrderStatusFailedException(orderCreateRequestDto.getOrderState().toString());
+        }
+        Order order = Order.builder()
+                .orderDate(LocalDate.now())
+                .orderState(Order.OrderState.valueOf("WAITING"))
+                .deliveryFee(orderCreateRequestDto.getDeliveryFee())
+                .payment(orderCreateRequestDto.getPayment())
+                .customer(orderCreateRequestDto.getCustomer())
+                .receiverName(orderCreateRequestDto.getReceiverName())
+                .receiverPhoneNumber(orderCreateRequestDto.getReceiverPhoneNumber())
+                .zipcode(orderCreateRequestDto.getZipcode())
+                .address(orderCreateRequestDto.getAddress())
+                .addressDetail(orderCreateRequestDto.getAddressDetail())
+                .req(orderCreateRequestDto.getReq())
+                .orderDetails(orderCreateRequestDto.getOrderDetailList())
+                .build();
+
+        Order createdOrder = orderRepository.save(order);
+        Optional<OrderResponseDto> orderResponseDto = orderRepository.getOrderByOrderId(createdOrder.getOrderId());
+
+        if(orderResponseDto.isPresent()){
+            return orderResponseDto.get();
+        }else{
+            throw new SaveOrderFailed(orderResponseDto.get().getOrderId());
+        }
     }
-
-
-    // 주문 수정
+    // 주문 상태 변경
     @Override
-    public OrderResponseDto updateOrderState(OrderRequestDto orderRequestDto) {
-        return null;
+    public void modifyOrderState(Long orderId, Order.OrderState orderState) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isEmpty()) {
+            throw new NotFoundOrderException(orderId);
+        }
+        try {
+            Order order = optionalOrder.get();
+
+            order.modifyState(orderState);
+            orderRepository.save(order);
+
+        } catch (IllegalArgumentException e) {
+            throw new InvalidOrderStateException(orderState);
+        }
     }
+
+
 }

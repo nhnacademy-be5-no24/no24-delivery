@@ -1,7 +1,8 @@
 package com.nhnacademy.delivery.order.service;
 
+import com.nhnacademy.delivery.order.domain.Order;
 import com.nhnacademy.delivery.order.dto.request.OrderCreateRequestDto;
-import com.nhnacademy.delivery.order.dto.request.OrderRequestDto;
+import com.nhnacademy.delivery.order.dto.request.OrderModifyOrderStateRequestDto;
 import com.nhnacademy.delivery.order.dto.response.OrderListForAdminResponseDto;
 import com.nhnacademy.delivery.order.dto.response.OrderResponseDto;
 import org.springframework.data.domain.Page;
@@ -51,10 +52,10 @@ public interface OrderService {
 
 
     /**
-     * 주문 상태 변경을 위한 method.
      *
-     * @param orderRequestDto 주문 상태 변경를 위한 정보 입니다.
-     * @return OrderResponseDto 주문 정보가 반환됩니다.
+     * @param orderId 조회할  주문 id.
+     * @param orderState 수정할 state 정보
+     * @return
      */
-    OrderResponseDto updateOrderState(OrderRequestDto orderRequestDto);
+    void modifyOrderState(Long orderId, Order.OrderState orderState);
 }

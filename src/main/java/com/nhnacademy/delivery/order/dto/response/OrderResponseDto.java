@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class OrderResponseDto {
+public class  OrderResponseDto {
 
     private Long orderId;
     private List<BookInfo> books;

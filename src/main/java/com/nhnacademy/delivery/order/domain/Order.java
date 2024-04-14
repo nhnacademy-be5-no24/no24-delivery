@@ -26,7 +26,7 @@ import java.util.List;
 public class Order {
 
     public enum OrderState {
-        WAITING, SHIPPING, COMPLETED, RETURNS, ORDER_CANCELED, PURCHASE_CONFIRMED
+        COMPLETE_PAYMENT, WAITING, SHIPPING, COMPLETED, RETURNS, ORDER_CANCELED, PURCHASE_CONFIRMED
     }
 
     @Id
@@ -70,5 +70,9 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderDetail> orderDetails = new ArrayList<>();
+
+    public void modifyState(OrderState orderState){
+        this.orderState = orderState;
+    }
 
 }
