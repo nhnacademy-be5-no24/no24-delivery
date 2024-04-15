@@ -9,11 +9,11 @@ import java.util.List;
 @Getter
 @Builder
 public class  OrderResponseDto {
-    private Long orderId;
+    private String orderId;
     private List<OrderInfo> orders;
     private List<BookInfo> books;
 
-    public OrderResponseDto(Long orderId,List<OrderInfo> orders, List<BookInfo> books) {
+    public OrderResponseDto(String orderId,List<OrderInfo> orders, List<BookInfo> books) {
         this.orderId = orderId;
         this.orders = orders;
         this.books = books;

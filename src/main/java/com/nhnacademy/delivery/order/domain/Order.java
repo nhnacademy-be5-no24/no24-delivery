@@ -32,7 +32,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    private String orderId;
 
     @Column(name = "order_date", nullable = false)
     private LocalDate orderDate;

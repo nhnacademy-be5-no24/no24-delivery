@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
     // 주문아이디로 상품리스트 가져오기
     @Override
     @Transactional(readOnly = true)
-    public OrderResponseDto getOrderByOrderId(Long orderId) {
+    public OrderResponseDto getOrderByOrderId(String orderId) {
         Optional<OrderResponseDto> optionalOrder = orderRepository.getOrderByOrderId(orderId);
         if(optionalOrder.isEmpty()){
             throw new NotFoundOrderException(orderId);
@@ -92,7 +92,7 @@ public class OrderServiceImpl implements OrderService {
     }
     // 주문 상태 변경
     @Override
-    public void modifyOrderState(Long orderId, Order.OrderState orderState) {
+    public void modifyOrderState(String orderId, Order.OrderState orderState) {
         Optional<Order> optionalOrder = orderRepository.findById(orderId);
         if (optionalOrder.isEmpty()) {
             throw new NotFoundOrderException(orderId);

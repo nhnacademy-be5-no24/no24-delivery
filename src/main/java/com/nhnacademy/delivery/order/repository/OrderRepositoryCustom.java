@@ -34,7 +34,7 @@ public interface OrderRepositoryCustom {
      * @param orderId 주문 아이디.
      * @return OrderResponseDto 주문 정보를 반환.
      */
-    Optional<OrderResponseDto> getOrderByOrderId(Long orderId);
+    Optional<OrderResponseDto> getOrderByOrderId(String orderId);
 
 
 

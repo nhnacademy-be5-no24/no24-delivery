@@ -91,7 +91,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
         return PageableExecutionUtils.getPage(query.fetch(), pageable, query::fetchCount);
     }
     @Override
-    public Optional<OrderResponseDto> getOrderByOrderId(Long orderId) {
+    public Optional<OrderResponseDto> getOrderByOrderId(String orderId) {
         return Optional.of(
                 from(order)
                         .select(Projections.constructor(
@@ -110,7 +110,7 @@ public class OrderRepositoryImpl extends QuerydslRepositorySupport implements Or
 
                         ))
                         .innerJoin(order.orderDetails, orderDetail)
-                        .where(order.orderId.eq(orderId))
+                        .where(order.orderId.eq(Long.valueOf(orderId)))
                         .fetchOne()
         );
     }

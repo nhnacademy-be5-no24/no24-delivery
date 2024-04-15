@@ -39,7 +39,7 @@ class OrderDetailEntityTest{
                 .build();
 
         Order order = Order.builder()
-                .orderId(1L)
+                .orderId("orderId")
                 .orderDate(LocalDate.now())
                 .orderState(Order.OrderState.WAITING)
                 .deliveryFee(500L)

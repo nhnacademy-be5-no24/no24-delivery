@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class  OrderListForAdminResponseDto {
-    private Long orderId;
+    private String orderId;
     private String customerName;
     private String wrapName;
     private Long wrapCosts;
@@ -15,7 +15,7 @@ public class  OrderListForAdminResponseDto {
     private Long bookSalePrices;
 
 
-    public OrderListForAdminResponseDto(Long orderId, String customerName, String wrapName, Long wrapCosts, String bookTitles, Long bookSalePrices) {
+    public OrderListForAdminResponseDto(String orderId, String customerName, String wrapName, Long wrapCosts, String bookTitles, Long bookSalePrices) {
         this.orderId = orderId;
         this.customerName = customerName;
         this.wrapName = wrapName;

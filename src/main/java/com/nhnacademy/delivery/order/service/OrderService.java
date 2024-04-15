@@ -19,7 +19,7 @@ public interface OrderService {
     /**
      *  (admin) 주문 전체 조회를 위한 method.
      *
-     * @return OrderResponDto 주문 정보 리스트로 반환됩니다.
+     * @return OrderResponseDto 주문 정보 반환.
      */
     Page<OrderListForAdminResponseDto> getOrders(Pageable pageable);
 
@@ -27,9 +27,9 @@ public interface OrderService {
      *  주문 id로 단건 조회를 위한 method.
      *
      * @param orderId 조회할 주문 아이디 입니다.
-     * @return OrderResponseDto 주문 정보가 반환됩니다.
+     * @return OrderResponseDto 주문 정보가 반환.
      */
-    OrderResponseDto getOrderByOrderId(Long orderId);
+    OrderResponseDto getOrderByOrderId(String orderId);
 
 
 
@@ -45,7 +45,7 @@ public interface OrderService {
     /**
      *  주문 등록을 위한 method.
      * @param orderCreateRequestDto 주문 등록을 위한 정보 입니다.
-     * @return OrderResponseDto 주문 정보가 반환됩니다.
+     * @return OrderResponseDto 주문 정보가 반환.
      */
     OrderResponseDto createOrder(OrderCreateRequestDto orderCreateRequestDto);
 
@@ -54,7 +54,6 @@ public interface OrderService {
      *
      * @param orderId 조회할  주문 id.
      * @param orderState 수정할 state 정보
-     * @return void
      */
-    void modifyOrderState(Long orderId, Order.OrderState orderState);
+    void modifyOrderState(String orderId, Order.OrderState orderState);
 }
