@@ -1,12 +1,13 @@
-package com.nhnacademy.delivery.order.controller;
+package com.nhnacademy.delivery.orders.controller;
 
-import com.nhnacademy.delivery.order.dto.request.OrderCreateRequestDto;
-import com.nhnacademy.delivery.order.dto.request.OrderModifyOrderStateRequestDto;
-import com.nhnacademy.delivery.order.dto.response.OrderListForAdminResponseDto;
-import com.nhnacademy.delivery.order.dto.response.OrderResponseDto;
-import com.nhnacademy.delivery.order.exception.OrderStatusFailedException;
-import com.nhnacademy.delivery.order.exception.SaveOrderFailed;
-import com.nhnacademy.delivery.order.service.OrderService;
+import com.nhnacademy.delivery.orders.dto.request.OrdersCreateRequestDto;
+import com.nhnacademy.delivery.orders.dto.request.OrdersModifyOrderStateRequestDto;
+import com.nhnacademy.delivery.orders.dto.response.OrdersListForAdminResponseDto;
+import com.nhnacademy.delivery.orders.dto.response.OrdersResponseDto;
+import com.nhnacademy.delivery.orders.exception.OrderStatusFailedException;
+import com.nhnacademy.delivery.orders.exception.SaveOrderFailed;
+
+import com.nhnacademy.delivery.orders.service.OrdersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/orders")
 public class OrderController {
-    private final OrderService orderService;
+    private final OrdersService orderService;
 
 
     /**
@@ -28,7 +29,7 @@ public class OrderController {
      * @return 200 OK, 모든 주문 반환.
      */
     @GetMapping("/admin")
-    public ResponseEntity<Page<OrderListForAdminResponseDto>> getOrders(
+    public ResponseEntity<Page<OrdersListForAdminResponseDto>> getOrders(
             Pageable pageable
     ){
         return ResponseEntity.status(HttpStatus.OK)
@@ -43,10 +44,10 @@ public class OrderController {
      * @return 200, 고객의 모든 주문 반환.
      */
     @GetMapping("/customer/{customerNo}")
-    public ResponseEntity<Page<OrderResponseDto>> getOrdersByCustomer(
+    public ResponseEntity<Page<OrdersResponseDto>> getOrdersByCustomer(
             @PathVariable Long customerNo,
             Pageable pageable) {
-        Page<OrderResponseDto> ordersPage = orderService.getOrdersByCustomer(pageable, customerNo);
+        Page<OrdersResponseDto> ordersPage = orderService.getOrderByCustomer(pageable, customerNo);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(ordersPage);
@@ -59,10 +60,10 @@ public class OrderController {
      * @return 200 OK, 주문 상세내용을 반환.
      */
     @GetMapping("/orderId/{orderId}")
-    public ResponseEntity<OrderResponseDto> getOrderDetailByOrderId(
+    public ResponseEntity<OrdersResponseDto> getOrderDetailByOrderId(
             @PathVariable String orderId
     ) {
-        OrderResponseDto responseDto = orderService.getOrderByOrderId(orderId);
+        OrdersResponseDto responseDto = orderService.getOrderByOrdersId(orderId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -71,19 +72,19 @@ public class OrderController {
 
     /**
      *
-     * @param orderCreateRequestDto 주문 등록을 위한 dto.
+     * @param ordersCreateRequestDto 주문 등록을 위한 dto.
      * @throws OrderStatusFailedException not found.
      * @throws SaveOrderFailed not found.
      * @return 201 created.
      */
     @PostMapping("/orders")
     public ResponseEntity<String> createOrder(
-            @RequestBody OrderCreateRequestDto orderCreateRequestDto
+            @RequestBody OrdersCreateRequestDto ordersCreateRequestDto
             ){
         try{
             return ResponseEntity.status(HttpStatus.CREATED)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(orderService.createOrder(orderCreateRequestDto).getOrderId());
+                    .body(orderService.createOrder(ordersCreateRequestDto).getOrderId());
         }catch(OrderStatusFailedException | SaveOrderFailed e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -93,16 +94,16 @@ public class OrderController {
      * 주문 상태 바꾸는 method.
      *
      * @param orderId 주문 아이디
-     * @param orderModifyOrderStateRequestDto 주문상태 정보 dto
+     * @param ordersModifyOrderStateRequestDto 주문상태 정보 dto
      *
      * @return 201, created 반환
      */
     @PutMapping("orders/{orderId}/state")
     public ResponseEntity<Void> modifyOrderState(
             @PathVariable String orderId,
-            @RequestBody OrderModifyOrderStateRequestDto orderModifyOrderStateRequestDto
+            @RequestBody OrdersModifyOrderStateRequestDto ordersModifyOrderStateRequestDto
     ){
-        orderService.modifyOrderState(orderId, orderModifyOrderStateRequestDto.getOrderState());
+        orderService.modifyOrderState(orderId, ordersModifyOrderStateRequestDto.getOrderState());
         return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }

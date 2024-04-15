@@ -1,4 +1,4 @@
-package com.nhnacademy.delivery.order.exception;
+package com.nhnacademy.delivery.orders.exception;
 
 public class NotFoundOrderException extends RuntimeException{
     public NotFoundOrderException(String orderId){

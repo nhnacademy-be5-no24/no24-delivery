@@ -2,7 +2,7 @@ package com.nhnacademy.delivery.order_detail;
 
 
 import com.nhnacademy.delivery.book.domain.Book;
-import com.nhnacademy.delivery.order.domain.Order;
+import com.nhnacademy.delivery.orders.domain.Orders;
 import com.nhnacademy.delivery.order_detail.domain.OrderDetail;
 import com.nhnacademy.delivery.wrap.domain.Wrap;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ class OrderDetailEntityTest{
                 .wrapCost(200L)
                 .build();
 
-        Order order = Order.builder()
+        Orders order = Orders.builder()
                 .orderId("orderId")
                 .orderDate(LocalDate.now())
-                .orderState(Order.OrderState.WAITING)
+                .orderState(Orders.OrderState.WAITING)
                 .deliveryFee(500L)
                 .receiverName("John Doe")
                 .receiverPhoneNumber("1234567890")
@@ -59,7 +59,7 @@ class OrderDetailEntityTest{
                 .build();
 
         assertEquals(1L, orderDetail.getOrderDetailId());
-        assertEquals(1L, orderDetail.getOrder().getOrderId());
+        assertEquals("orderId", orderDetail.getOrder().getOrderId());
         assertEquals("1234567890", orderDetail.getBook().getBookIsbn());
         assertEquals(1L, orderDetail.getWrap().getWrapId());
     }

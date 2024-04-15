@@ -1,12 +1,12 @@
-package com.nhnacademy.delivery.order;
+package com.nhnacademy.delivery.orders;
 import com.nhnacademy.delivery.book.domain.Book;
 import com.nhnacademy.delivery.book.repository.BookRepository;
 import com.nhnacademy.delivery.customer.domain.Customer;
 import com.nhnacademy.delivery.customer.repository.CustomerRepository;
-import com.nhnacademy.delivery.order.domain.Order;
-import com.nhnacademy.delivery.order.dto.response.OrderListForAdminResponseDto;
-import com.nhnacademy.delivery.order.dto.response.OrderResponseDto;
-import com.nhnacademy.delivery.order.repository.OrderRepository;
+import com.nhnacademy.delivery.orders.domain.Orders;
+import com.nhnacademy.delivery.orders.dto.response.OrdersListForAdminResponseDto;
+import com.nhnacademy.delivery.orders.dto.response.OrdersResponseDto;
+import com.nhnacademy.delivery.orders.repository.OrdersRepository;
 import com.nhnacademy.delivery.order_detail.domain.OrderDetail;
 import com.nhnacademy.delivery.order_detail.repository.OrderDetailRepository;
 import com.nhnacademy.delivery.payment.domain.Payment;
@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -39,9 +40,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles(value = "dev")
 @Transactional
 @WebAppConfiguration
-class OrderRepositoryTest {
+class OrdersRepositoryTest {
     @Autowired
-    private OrderRepository orderRepository;
+    private OrdersRepository ordersRepository;
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
@@ -56,7 +57,7 @@ class OrderRepositoryTest {
     private Customer customer;
     private Book book;
     private Wrap wrap;
-    private Order order;
+    private Orders order;
     private OrderDetail orderDetail;
     private Payment payment;
     @BeforeEach
@@ -96,11 +97,11 @@ class OrderRepositoryTest {
                 .wrapCost(1L)
                 .build();
 
-        order = Order.builder()
+        order = Orders.builder()
                 .orderId("orderId")
                 .orderDate(LocalDate.of(2024, 4, 14))
                 .deliveryFee(1L)
-                .orderState(Order.OrderState.WAITING)
+                .orderState(Orders.OrderState.WAITING)
                 .payment(payment)
                 .customer(customer)
                 .receiverName("name")
@@ -116,45 +117,53 @@ class OrderRepositoryTest {
                 .wrap(wrap)
                 .order(order)
                 .build();
+
+        paymentRepository.save(payment);
+        customerRepository.save(customer);
+        bookRepository.save(book);
+        wrapRepository.save(wrap);
+        ordersRepository.save(order);
+        orderDetailRepository.save(orderDetail);
     }
 
     @Test
     @DisplayName("모든 주문 리스트 반환")
     void testGetOrderList(){
-        paymentRepository.save(payment);
-        customerRepository.save(customer);
-        bookRepository.save(book);
-        wrapRepository.save(wrap);
-        orderRepository.save(order);
-        orderDetailRepository.save(orderDetail);
+
 
         Pageable pageable = PageRequest.of(0,10);
-        Page<OrderListForAdminResponseDto> dtoPage = orderRepository.getOrderList(pageable);
-        List<OrderListForAdminResponseDto> orderList = dtoPage.getContent();
+        Page<OrdersListForAdminResponseDto> dtoPage = ordersRepository.getOrderList(pageable);
+        List<OrdersListForAdminResponseDto> orderList = dtoPage.getContent();
 
         assertThat(orderList).isNotEmpty();
         Assertions.assertEquals(1,orderList.size());
-        Assertions.assertEquals(1L,orderList.get(0).getBookSalePrices());
+        Assertions.assertEquals(1L,orderList.get(0).getBookSalePrice());
     }
 
     @Test
     @DisplayName("고객번호로 주문 리스트 반환")
     void testGetOrdersListByCustomer(){
-        paymentRepository.save(payment);
-        customerRepository.save(customer);
-        bookRepository.save(book);
-        wrapRepository.save(wrap);
-        orderRepository.save(order);
-        orderDetailRepository.save(orderDetail);
 
         Long customerNo = 1L;
 
         Pageable pageable = PageRequest.of(0,10);
-        Page<OrderResponseDto> dtoPage = orderRepository.getOrdersListByCustomer(pageable,customerNo);
-        List<OrderResponseDto> orderList = dtoPage.getContent();
+        Page<OrdersResponseDto> dtoPage = ordersRepository.getOrderListByCustomer(pageable,customerNo);
+        List<OrdersResponseDto> orderList = dtoPage.getContent();
 
         assertThat(orderList).isNotEmpty();
         Assertions.assertEquals(1,orderList.size());
-        Assertions.assertEquals(1L,orderList.get(0).getOrderId());
+        Assertions.assertEquals("orderId",orderList.get(0).getOrderId());
+    }
+
+    @Test
+    @DisplayName("주문아이디로 주문 반환")
+    void testGetOrderByOrderId(){
+        String orderId = "orderId";
+
+        Optional<OrdersResponseDto> orders = ordersRepository.getOrderByOrderId(orderId);
+
+        assertThat(orders).isNotEmpty();
+        Assertions.assertEquals("orderId",orders.get().getOrderId());
+        Assertions.assertEquals("name", orders.get().getReceiverName());
     }
 }

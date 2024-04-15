@@ -1,8 +1,9 @@
-package com.nhnacademy.delivery.order.dto.request;
+package com.nhnacademy.delivery.orders.dto.request;
 
 import com.nhnacademy.delivery.customer.domain.Customer;
-import com.nhnacademy.delivery.order.domain.Order;
+
 import com.nhnacademy.delivery.order_detail.domain.OrderDetail;
+import com.nhnacademy.delivery.orders.domain.Orders;
 import com.nhnacademy.delivery.payment.domain.Payment;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,9 +16,9 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @Builder
-public class OrderCreateRequestDto {
+public class OrdersCreateRequestDto {
     private LocalDate orderDate;
-    private Order.OrderState orderState;
+    private Orders.OrderState orderState;
     private Long deliveryFee;
     private Payment payment;
     private Customer customer;

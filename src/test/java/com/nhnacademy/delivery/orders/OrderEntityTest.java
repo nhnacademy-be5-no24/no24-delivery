@@ -1,7 +1,7 @@
-package com.nhnacademy.delivery.order;
+package com.nhnacademy.delivery.orders;
 
 import com.nhnacademy.delivery.customer.domain.Customer;
-import com.nhnacademy.delivery.order.domain.Order;
+import com.nhnacademy.delivery.orders.domain.Orders;
 import com.nhnacademy.delivery.payment.domain.Payment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,9 +15,9 @@ class OrderEntityTest {
 
     @Test
     void testOrder(){
-        Order order = Order.builder()
+        Orders order = Orders.builder()
                 .orderDate(LocalDate.now())
-                .orderState(Order.OrderState.WAITING)
+                .orderState(Orders.OrderState.WAITING)
                 .deliveryFee(1000L)
                 .payment(new Payment())
                 .customer(new Customer())
@@ -31,8 +31,8 @@ class OrderEntityTest {
                 .build();
 
 
-        order.modifyState(Order.OrderState.SHIPPING);
+        order.modifyState(Orders.OrderState.SHIPPING);
 
-        Assertions.assertEquals(Order.OrderState.SHIPPING, order.getOrderState());
+        Assertions.assertEquals(Orders.OrderState.SHIPPING, order.getOrderState());
     }
 }

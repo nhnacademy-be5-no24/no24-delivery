@@ -1,4 +1,4 @@
-package com.nhnacademy.delivery.order.domain;
+package com.nhnacademy.delivery.orders.domain;
 
 import com.nhnacademy.delivery.customer.domain.Customer;
 import com.nhnacademy.delivery.order_detail.domain.OrderDetail;
@@ -24,14 +24,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Table(name = "orders")
-public class Order {
+public class Orders {
 
     public enum OrderState {
         COMPLETE_PAYMENT, WAITING, SHIPPING, COMPLETED, RETURNS, ORDER_CANCELED, PURCHASE_CONFIRMED
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String orderId;
 
     @Column(name = "order_date", nullable = false)

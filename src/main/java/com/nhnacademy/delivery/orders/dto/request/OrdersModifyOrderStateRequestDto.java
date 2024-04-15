@@ -1,9 +1,8 @@
-package com.nhnacademy.delivery.order.dto.request;
+package com.nhnacademy.delivery.orders.dto.request;
 
-import com.nhnacademy.delivery.order.domain.Order;
+import com.nhnacademy.delivery.orders.domain.Orders;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 /**
@@ -15,6 +14,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 @Builder
-public class OrderModifyOrderStateRequestDto {
-    private Order.OrderState orderState;
+public class OrdersModifyOrderStateRequestDto {
+    private Orders.OrderState orderState;
 }

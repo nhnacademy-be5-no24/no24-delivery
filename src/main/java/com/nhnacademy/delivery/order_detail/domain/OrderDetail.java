@@ -1,7 +1,7 @@
 package com.nhnacademy.delivery.order_detail.domain;
 
 import com.nhnacademy.delivery.book.domain.Book;
-import com.nhnacademy.delivery.order.domain.Order;
+import com.nhnacademy.delivery.orders.domain.Orders;
 import com.nhnacademy.delivery.wrap.domain.Wrap;
 import lombok.*;
 
@@ -28,7 +28,7 @@ public class OrderDetail {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    private Orders order;
 
     @ManyToOne
     @JoinColumn(name = "book_isbn")
