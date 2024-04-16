@@ -1,8 +1,10 @@
 package com.nhnacademy.delivery.orders.controller;
 
+import com.nhnacademy.delivery.orders.domain.Orders;
 import com.nhnacademy.delivery.orders.dto.request.OrdersCreateRequestDto;
 import com.nhnacademy.delivery.orders.dto.request.OrdersModifyOrderStateRequestDto;
 import com.nhnacademy.delivery.orders.dto.response.OrdersListForAdminResponseDto;
+import com.nhnacademy.delivery.orders.dto.response.OrdersModifyResponseDto;
 import com.nhnacademy.delivery.orders.dto.response.OrdersResponseDto;
 import com.nhnacademy.delivery.orders.exception.OrderStatusFailedException;
 import com.nhnacademy.delivery.orders.exception.SaveOrderFailed;
@@ -77,14 +79,15 @@ public class OrderController {
      * @throws SaveOrderFailed not found.
      * @return 201 created.
      */
-    @PostMapping("/orders")
-    public ResponseEntity<String> createOrder(
+    @PostMapping
+    public ResponseEntity<OrdersResponseDto> createOrder(
             @RequestBody OrdersCreateRequestDto ordersCreateRequestDto
             ){
         try{
+            OrdersResponseDto dto = orderService.createOrder(ordersCreateRequestDto);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(orderService.createOrder(ordersCreateRequestDto).getOrderId());
+                    .body(dto);
         }catch(OrderStatusFailedException | SaveOrderFailed e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -94,18 +97,18 @@ public class OrderController {
      * 주문 상태 바꾸는 method.
      *
      * @param orderId 주문 아이디
-     * @param ordersModifyOrderStateRequestDto 주문상태 정보 dto
+     * @param orderState 주문상태
      *
      * @return 201, created 반환
      */
-    @PutMapping("orders/{orderId}/state")
+    @PutMapping("/{orderId}/state")
     public ResponseEntity<Void> modifyOrderState(
             @PathVariable String orderId,
-            @RequestBody OrdersModifyOrderStateRequestDto ordersModifyOrderStateRequestDto
-    ){
-        orderService.modifyOrderState(orderId, ordersModifyOrderStateRequestDto.getOrderState());
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+            @RequestParam Orders.OrderState orderState
+            ){
 
+        orderService.modifyOrderState(orderId, orderState);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 

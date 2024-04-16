@@ -203,7 +203,7 @@ class OrderServiceTest {
 
     }
     @Test
-    @DisplayName("주문리스트 전체 가져오기")
+    @DisplayName("주문리스트 전체 가져오기 test")
     void testGetOrders() {
         List<OrdersListForAdminResponseDto> ordersList = Arrays.asList(adminResponseDto, adminResponseDto2);
         Page<OrdersListForAdminResponseDto> mockedPage = new PageImpl<>(ordersList);
@@ -217,7 +217,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("주문아이디로 상품리스트 가져오기")
+    @DisplayName("주문아이디로 상품리스트 가져오기 test")
     void testGetOrderByOrdersId() {
         when(ordersRepository.getOrderByOrderId(anyString())).thenReturn(Optional.of(ordersResponseDto));
 
@@ -229,7 +229,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("고객번호로 상품리스트 가져오기")
+    @DisplayName("고객번호로 상품리스트 가져오기 test")
     void testGetOrderByCustomer() {
 
         List<OrdersResponseDto> mockedResponse = Arrays.asList(ordersResponseDto, ordersResponseDto2);
@@ -243,7 +243,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("주문 생성 - 성공")
+    @DisplayName("주문 생성 - 성공 test ")
     void testCreateOrder_Success() {
 
         when(ordersRepository.save(any())).thenReturn(order);
@@ -258,12 +258,12 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("주문 생성 - 실패: 주문 상태 오류")
+    @DisplayName("주문 생성 - 실패: 주문 상태 오류 test")
     void testCreateOrder_Fail_OrderStatusFailedException() {
         assertThrows(OrderStatusFailedException.class, () -> ordersService.createOrder(createRequestDtoNoState));
     }
     @Test
-    @DisplayName("주문 생성 - 실패: 주문 저장 실패")
+    @DisplayName("주문 생성 - 실패: 주문 저장 실패 test")
     void testCreateOrder_Fail_SaveOrderFailed() {
         doThrow(SaveOrderFailed.class).when(ordersRepository).save(any());
 
@@ -273,7 +273,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("주문 상태 수정 - 성공")
+    @DisplayName("주문 상태 수정 - 성공 test")
     void testModifyOrderState_OrderExists() {
 
         String orderId = "orderId";
@@ -290,7 +290,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("주문 상태 수정 - 실패: 주문이 존재하지 않음")
+    @DisplayName("주문 상태 수정 - 실패: 주문이 존재하지 않음 test")
     void testModifyOrderState_OrderNotExists() {
 
         String orderId = "nonExistentOrderId";
