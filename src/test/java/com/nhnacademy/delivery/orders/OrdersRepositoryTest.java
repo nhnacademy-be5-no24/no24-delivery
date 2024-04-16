@@ -13,21 +13,16 @@ import com.nhnacademy.delivery.payment.domain.Payment;
 import com.nhnacademy.delivery.payment.repository.PaymentRepository;
 import com.nhnacademy.delivery.wrap.domain.Wrap;
 import com.nhnacademy.delivery.wrap.repository.WrapRepository;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -35,10 +30,9 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@ExtendWith(SpringExtension.class)
+
 @DataJpaTest
 @ActiveProfiles(value = "dev")
-@Transactional
 @WebAppConfiguration
 class OrdersRepositoryTest {
     @Autowired
@@ -53,7 +47,8 @@ class OrdersRepositoryTest {
     private WrapRepository wrapRepository;
     @Autowired
     private PaymentRepository paymentRepository;
-
+    @Autowired
+    private EntityManager entityManager;
     private Customer customer;
     private Book book;
     private Wrap wrap;
@@ -117,19 +112,23 @@ class OrdersRepositoryTest {
                 .wrap(wrap)
                 .order(order)
                 .build();
+    }
 
+    @AfterEach
+    public void teardown() {
+        this.entityManager.createNativeQuery("ALTER TABLE customer ALTER COLUMN `customer_no` RESTART WITH 1").executeUpdate();
+        this.entityManager.createNativeQuery("ALTER TABLE payment ALTER COLUMN `payment_id` RESTART WITH 1").executeUpdate();
+        this.entityManager.createNativeQuery("ALTER TABLE wrap ALTER COLUMN `wrap_id` RESTART WITH 1").executeUpdate();
+    }
+    @Test
+    @DisplayName("모든 주문 리스트 반환")
+    void testGetOrderList(){
         paymentRepository.save(payment);
         customerRepository.save(customer);
         bookRepository.save(book);
         wrapRepository.save(wrap);
         ordersRepository.save(order);
         orderDetailRepository.save(orderDetail);
-    }
-
-    @Test
-    @DisplayName("모든 주문 리스트 반환")
-    void testGetOrderList(){
-
 
         Pageable pageable = PageRequest.of(0,10);
         Page<OrdersListForAdminResponseDto> dtoPage = ordersRepository.getOrderList(pageable);
@@ -140,9 +139,16 @@ class OrdersRepositoryTest {
         Assertions.assertEquals(1L,orderList.get(0).getBookSalePrice());
     }
 
+
     @Test
     @DisplayName("고객번호로 주문 리스트 반환")
     void testGetOrdersListByCustomer(){
+        paymentRepository.save(payment);
+        customerRepository.save(customer);
+        bookRepository.save(book);
+        wrapRepository.save(wrap);
+        ordersRepository.save(order);
+        orderDetailRepository.save(orderDetail);
 
         Long customerNo = 1L;
 
@@ -158,6 +164,13 @@ class OrdersRepositoryTest {
     @Test
     @DisplayName("주문아이디로 주문 반환")
     void testGetOrderByOrderId(){
+        paymentRepository.save(payment);
+        customerRepository.save(customer);
+        bookRepository.save(book);
+        wrapRepository.save(wrap);
+        ordersRepository.save(order);
+        orderDetailRepository.save(orderDetail);
+
         String orderId = "orderId";
 
         Optional<OrdersResponseDto> orders = ordersRepository.getOrderByOrderId(orderId);

@@ -5,7 +5,6 @@ import com.nhnacademy.delivery.orders.domain.Orders;
 import com.nhnacademy.delivery.orders.dto.request.OrdersCreateRequestDto;
 import com.nhnacademy.delivery.orders.dto.response.OrdersListForAdminResponseDto;
 import com.nhnacademy.delivery.orders.dto.response.OrdersResponseDto;
-import com.nhnacademy.delivery.orders.exception.InvalidOrderStateException;
 import com.nhnacademy.delivery.orders.exception.NotFoundOrderException;
 import com.nhnacademy.delivery.orders.exception.OrderStatusFailedException;
 import com.nhnacademy.delivery.orders.exception.SaveOrderFailed;
@@ -65,8 +64,9 @@ public class OrdersServiceImpl implements OrdersService {
     @Override
     @Transactional
     public OrdersResponseDto createOrder(OrdersCreateRequestDto ordersCreateRequestDto) {
-        if(!ordersCreateRequestDto.getOrderState().toString().isEmpty()){
-            throw new OrderStatusFailedException(ordersCreateRequestDto.getOrderState().toString());
+        Orders.OrderState orderState = ordersCreateRequestDto.getOrderState();
+        if (orderState != Orders.OrderState.COMPLETE_PAYMENT) {
+            throw new OrderStatusFailedException("Invalid order state: " + orderState);
         }
         Orders orders = Orders.builder()
                 .orderDate(LocalDate.now())
@@ -95,19 +95,18 @@ public class OrdersServiceImpl implements OrdersService {
     // 주문 상태 변경
     @Override
     public void modifyOrderState(String orderId, Orders.OrderState orderstate) {
+
         Optional<Orders> optionalOrders = ordersRepository.findById(orderId);
         if (optionalOrders.isEmpty()) {
             throw new NotFoundOrderException(orderId);
         }
-        try {
-            Orders orders = optionalOrders.get();
 
-            orders.modifyState(orderstate);
-            ordersRepository.save(orders);
+        Orders orders = optionalOrders.get();
 
-        } catch (IllegalArgumentException e) {
-            throw new InvalidOrderStateException(orderstate);
-        }
+        orders.modifyState(orderstate);
+        ordersRepository.save(orders);
+
+
     }
 
 

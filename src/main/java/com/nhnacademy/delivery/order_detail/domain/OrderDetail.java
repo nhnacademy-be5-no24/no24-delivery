@@ -1,5 +1,6 @@
 package com.nhnacademy.delivery.order_detail.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.nhnacademy.delivery.book.domain.Book;
 import com.nhnacademy.delivery.orders.domain.Orders;
 import com.nhnacademy.delivery.wrap.domain.Wrap;
@@ -35,6 +36,7 @@ public class OrderDetail {
     private Book book;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "wrap_id")
     private Wrap wrap;
 }

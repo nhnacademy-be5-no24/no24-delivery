@@ -1,5 +1,6 @@
 package com.nhnacademy.delivery.orders.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nhnacademy.delivery.customer.domain.Customer;
 import com.nhnacademy.delivery.order_detail.domain.OrderDetail;
 import com.nhnacademy.delivery.payment.domain.Payment;
@@ -69,6 +70,7 @@ public class Orders {
     private String req;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderDetail> orderDetails = new ArrayList<>();
 
     public void modifyState(OrderState orderState){

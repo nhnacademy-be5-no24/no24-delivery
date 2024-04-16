@@ -68,6 +68,8 @@ public class OrdersRepositoryImpl extends QuerydslRepositorySupport implements O
 
     @Override
     public Page<OrdersResponseDto> getOrderListByCustomer(Pageable pageable, Long customerNo) {
+
+
         JPQLQuery<OrdersResponseDto> query = from(orders)
                 .select(Projections.constructor(
                         OrdersResponseDto.class,
