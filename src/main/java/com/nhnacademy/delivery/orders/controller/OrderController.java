@@ -79,15 +79,15 @@ public class OrderController {
      * @throws SaveOrderFailed not found.
      * @return 201 created.
      */
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<OrdersResponseDto> createOrder(
-            @RequestBody OrdersCreateRequestDto ordersCreateRequestDto
+            OrdersCreateRequestDto ordersCreateRequestDto
             ){
         try{
-            OrdersResponseDto dto = orderService.createOrder(ordersCreateRequestDto);
+
             return ResponseEntity.status(HttpStatus.CREATED)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .body(dto);
+                    .body(orderService.createOrder(ordersCreateRequestDto));
         }catch(OrderStatusFailedException | SaveOrderFailed e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

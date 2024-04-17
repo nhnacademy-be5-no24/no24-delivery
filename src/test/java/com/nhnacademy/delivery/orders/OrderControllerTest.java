@@ -1,13 +1,14 @@
 package com.nhnacademy.delivery.orders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nhnacademy.delivery.book.domain.Book;
 import com.nhnacademy.delivery.customer.domain.Customer;
 import com.nhnacademy.delivery.order_detail.domain.OrderDetail;
 import com.nhnacademy.delivery.orders.controller.OrderController;
 import com.nhnacademy.delivery.orders.domain.Orders;
 import com.nhnacademy.delivery.orders.dto.request.OrdersCreateRequestDto;
-import com.nhnacademy.delivery.orders.dto.request.OrdersModifyOrderStateRequestDto;
 import com.nhnacademy.delivery.orders.dto.response.OrdersListForAdminResponseDto;
 import com.nhnacademy.delivery.orders.dto.response.OrdersResponseDto;
 import com.nhnacademy.delivery.orders.service.OrdersService;
@@ -16,6 +17,7 @@ import com.nhnacademy.delivery.wrap.domain.Wrap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -26,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,6 +47,8 @@ class OrderControllerTest {
     MockMvc mockMvc;
     @MockBean
     OrdersService ordersService;
+    @MockBean
+    EntityManager entityManager;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private Customer customer;
@@ -61,6 +66,9 @@ class OrderControllerTest {
 
     @BeforeEach
     void setup() {
+        MockitoAnnotations.openMocks(this);
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         initializeEntities();
         initializeAdminResponseDto();
     }
@@ -121,6 +129,7 @@ class OrderControllerTest {
                 .wrap(wrap)
                 .order(order)
                 .build();
+
     }
     private void initializeAdminResponseDto() {
         createRequestDto = new OrdersCreateRequestDto(
@@ -139,7 +148,7 @@ class OrderControllerTest {
         );
         createRequestDtoNoState = new OrdersCreateRequestDto(
                 LocalDate.of(2024, 4, 15),
-                Orders.OrderState.COMPLETE_PAYMENT,
+                Orders.OrderState.SHIPPING,
                 1L,
                 payment,
                 customer,
@@ -244,13 +253,20 @@ class OrderControllerTest {
     @Test
     @DisplayName("주문 생성 성공 test")
     void testCreateOrder() throws  Exception{
+        String jsonRequest = objectMapper.writeValueAsString(createRequestDto);
+        when(ordersService.createOrder(createRequestDto)).thenReturn(ordersResponseDto);
 
+        mockMvc.perform(MockMvcRequestBuilders.post("/orders")
+                        .contentType(MediaType.APPLICATION_JSON) // 요청 본문의 타입을 JSON으로 설정
+                        .content(jsonRequest))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 
     @Test
     @DisplayName("주문 상태 수정 성공 test")
     void testModifyOrderState() throws Exception {
-
+        String jsonRequest = objectMapper.writeValueAsString(createRequestDto);
         mockMvc.perform(MockMvcRequestBuilders.put("/orders/{orderId}/state", "orderId")
                         .param("orderState", Orders.OrderState.SHIPPING.name()))
                 .andExpect(status().isCreated());

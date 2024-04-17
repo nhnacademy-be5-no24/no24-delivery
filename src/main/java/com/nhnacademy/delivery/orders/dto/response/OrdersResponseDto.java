@@ -1,9 +1,12 @@
 package com.nhnacademy.delivery.orders.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.nhnacademy.delivery.orders.domain.Orders;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Column;
 import java.time.LocalDate;
 
 @Getter
@@ -14,6 +17,9 @@ public class OrdersResponseDto {
     private Long bookSalePrice;
     private String wrapName;
     private Long wrapCost;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate orderDate;
     private String receiverName;
     private String receiverPhoneNumber;

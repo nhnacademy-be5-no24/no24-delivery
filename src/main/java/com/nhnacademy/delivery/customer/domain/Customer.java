@@ -1,7 +1,9 @@
 package com.nhnacademy.delivery.customer.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -33,8 +35,12 @@ public class Customer {
     private String customerPhoneNumber;
     @Column(name = "customer_email")
     private String customerEmail;
+
     @Column(name = "customer_birthday")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate customerBirthday;
+
     @Column(name = "customer_role")
     private String  customerRole;
 }
