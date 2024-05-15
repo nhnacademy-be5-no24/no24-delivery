@@ -50,7 +50,7 @@ public class CouponMemberServiceImpl implements CouponMemberService {
                 .member(optionalMember.get())
                 .used(false)
                 .createdAt(LocalDateTime.now())
-                .destroyedAt(null)
+                .destroyedAt(optionalCoupon.get().getDeadline().atStartOfDay())
                 .usedAt(null)
                 .status(CouponMember.Status.ACTIVE)
                 .build();
