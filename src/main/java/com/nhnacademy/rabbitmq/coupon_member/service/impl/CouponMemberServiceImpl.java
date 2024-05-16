@@ -1,6 +1,7 @@
 package com.nhnacademy.rabbitmq.coupon_member.service.impl;
 
 import com.nhnacademy.rabbitmq.coupon.domain.Coupon;
+import com.nhnacademy.rabbitmq.coupon.exception.ExpiredCouponException;
 import com.nhnacademy.rabbitmq.coupon.exception.NotFoundCouponException;
 import com.nhnacademy.rabbitmq.coupon.repository.CouponRepository;
 import com.nhnacademy.rabbitmq.coupon_member.domain.CouponMember;
@@ -44,17 +45,22 @@ public class CouponMemberServiceImpl implements CouponMemberService {
             throw new MemberNotFoundException();
         }
 
-        CouponMember couponMember = CouponMember.builder()
-                .couponMemberId(null)
-                .coupon(optionalCoupon.get())
-                .member(optionalMember.get())
-                .used(false)
-                .createdAt(LocalDateTime.now())
-                .destroyedAt(optionalCoupon.get().getDeadline().atStartOfDay())
-                .usedAt(null)
-                .status(CouponMember.Status.ACTIVE)
-                .build();
+        if(optionalCoupon.get().getDeadline().atStartOfDay().isAfter(LocalDateTime.now())) {
+            CouponMember couponMember = CouponMember.builder()
+                    .couponMemberId(null)
+                    .coupon(optionalCoupon.get())
+                    .member(optionalMember.get())
+                    .used(false)
+                    .createdAt(LocalDateTime.now())
+                    .destroyedAt(optionalCoupon.get().getDeadline().atStartOfDay())
+                    .usedAt(null)
+                    .status(CouponMember.Status.ACTIVE)
+                    .build();
 
-        couponMember = couponMemberRepository.save(couponMember);
+            couponMember = couponMemberRepository.save(couponMember);
+        }
+        else {
+            throw new ExpiredCouponException(couponId);
+        }
     }
 }

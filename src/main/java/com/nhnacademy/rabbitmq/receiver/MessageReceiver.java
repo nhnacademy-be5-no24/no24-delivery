@@ -29,7 +29,11 @@ public class MessageReceiver {
         Long couponId = Long.parseLong(couponMessage.replaceAll(" ", "").split(":")[1]);
         Long memberId = Long.parseLong(memberMessage.replaceAll(" ", "").split(":")[1]);
 
-        couponMemberService.createCouponMember(couponId, memberId);
-        log.info("Success issuing -> " + message);
+        try {
+            couponMemberService.createCouponMember(couponId, memberId);
+            log.info("Success issuing -> " + message);
+        } catch(Exception e) {
+            log.error("expired coupon " + message);
+        }
     }
 }
